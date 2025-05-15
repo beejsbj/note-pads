@@ -1,0 +1,42 @@
+/* Mobile-first styles */
+:root {
+  /* Main theme colors */
+  --main-bg-color: #7b0000;
+  --active-bg-color: #a30000;
+  --text-color: #fff;
+  --accent-color: #00bfff;
+
+  /* Button colors */
+  --button-success: #4caf50;
+  --button-success-hover: #45a049;
+  --button-disabled: #cccccc;
+
+  /* Form colors */
+  --border-color: #ccc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--main-bg-color);
+  color: var(--text-color);
+}
+
+#app {
+  height: 100vh;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
