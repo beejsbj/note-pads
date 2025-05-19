@@ -13,7 +13,8 @@
     "pinia": "^3.0.2",
     "pitchy": "^4.1.0",
     "tone": "^15.1.22",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue3-touch-events": "^5.0.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

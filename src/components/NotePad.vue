@@ -136,7 +136,13 @@
         />
       </g>
     </svg>
-    <span :class="{ sharp: isSharp }">{{ note }}</span>
+    <span :class="{ sharp: isSharp }">
+      {{
+        note.includes("#")
+          ? `${note.replace("#", "♯")}/${getNextNote(note.replace("#", ""))}♭`
+          : note
+      }}
+    </span>
   </div>
 </template>
 
@@ -157,6 +163,13 @@ const props = defineProps({
     default: false,
   },
 });
+
+// Function to get the next note in the sequence
+const getNextNote = (note) => {
+  const sequence = ["C", "D", "E", "F", "G", "A", "B"];
+  const index = sequence.indexOf(note);
+  return sequence[(index + 1) % sequence.length];
+};
 </script>
 
 <style scoped>
