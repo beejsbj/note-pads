@@ -3,11 +3,26 @@ import { useMelodyStore } from "../stores/melodyStore";
 import { ref, watch } from "vue";
 
 const store = useMelodyStore();
-const bpm = ref(120); // Default 120 BPM
+const bpm = ref(store.bpm); // Initialize with store's BPM
 
+// Watch store's BPM for changes
+watch(
+  () => store.bpm,
+  (newBpm) => {
+    bpm.value = newBpm;
+  }
+);
+
+// Watch local BPM for user changes
 watch(bpm, (newBpm) => {
   store.setBpm(newBpm);
 });
+
+// Handle melody selection
+function handleMelodyChange(event) {
+  store.setSelectedMelody(event.target.value);
+  bpm.value = store.bpm; // Update local BPM when melody changes
+}
 </script>
 
 <template>
@@ -24,7 +39,11 @@ watch(bpm, (newBpm) => {
           :disabled="store.isPlaying"
         />
       </div>
-      <select v-model="store.selectedMelody" class="melody-select">
+      <select
+        v-model="store.selectedMelody"
+        class="melody-select"
+        @change="handleMelodyChange"
+      >
         <option v-for="(melody, key) in store.melodies" :key="key" :value="key">
           {{ melody.name }}
         </option>
@@ -51,6 +70,7 @@ watch(bpm, (newBpm) => {
 
 .controls {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
 }

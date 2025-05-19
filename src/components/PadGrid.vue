@@ -3,8 +3,10 @@ import NotePad from "./NotePad.vue";
 import { defineProps } from "vue";
 import { notes, octave, startNote, stopNote } from "../utils/audio";
 import { useMelodyStore } from "../stores/melodyStore";
+import { useNotesStore } from "../stores/notes";
 
-const store = useMelodyStore();
+const melodyStore = useMelodyStore();
+const notesStore = useNotesStore();
 
 defineProps({
   notes: {
@@ -25,7 +27,10 @@ defineProps({
       :key="note"
       :note="note"
       :is-sharp="note.includes('#')"
-      :is-highlighted="note === store.highlightedNote"
+      :is-highlighted="
+        note === melodyStore.highlightedNote ||
+        note === notesStore.highlightedNote
+      "
       @pointerdown="startNote(note)"
       @pointerup="stopNote(note)"
       @pointerleave="stopNote(note)"

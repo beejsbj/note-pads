@@ -1,9 +1,11 @@
 <script setup>
 import { onMounted } from "vue";
-import PadGrid from "./components/PadGrid.vue";
 import OctaveControl from "./components/OctaveControl.vue";
 import MelodyPlayer from "./components/MelodyPlayer.vue";
 import { initAudioContext } from "./utils/audio";
+import PadGrid from "./components/PadGrid.vue";
+import InstrumentSelector from "./components/InstrumentSelector.vue";
+import MicrophoneControl from "./components/MicrophoneControl.vue";
 
 onMounted(() => {
   // Lazy-initialize AudioContext on first user interaction for mobile Safari
@@ -17,9 +19,11 @@ onMounted(() => {
 
 <template>
   <div class="container">
+    <InstrumentSelector />
     <PadGrid />
     <OctaveControl />
     <MelodyPlayer />
+    <MicrophoneControl />
   </div>
 </template>
 
@@ -28,7 +32,8 @@ onMounted(() => {
   display: grid;
   padding: 0.5rem;
   box-sizing: border-box;
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
+  gap: 1rem;
 }
 </style>

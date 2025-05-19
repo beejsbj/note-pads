@@ -1,90 +1,77 @@
 import { ref } from "vue";
+import * as Tone from "tone";
+import { getCurrentInstrument } from "../stores/instrumentStore";
 
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const noteDurations = {
-  4: 4, //whole note
-  2: 2, //half note
-  1: 1, //quarter note
-  0.5: 0.5, //eighth note
-  0.25: 0.25, //sixteenth note
-  0.125: 0.125, //thirty-second note
+
+// Define note durations using Tone.js notation
+export const noteDurations = {
+  "1m": "whole", // whole note
+  "2n": "half", // half note
+  "4n": "quarter", // quarter note
+  "8n": "eighth", // eighth note
+  "16n": "sixteenth", // sixteenth note
+  "32n": "thirty-second", // thirty-second note
 };
 
 const octave = ref(4);
 const MIN_OCTAVE = 0;
 const MAX_OCTAVE = 8;
 
-// Calculate duration in milliseconds based on BPM and relative note duration
-export function calculateNoteDuration(relativeDuration, bpm) {
-  // At 60 BPM, a quarter note (duration 1.0) is 1000ms
-  // At other BPMs, we scale accordingly
-  const quarterNoteMs = (60 / bpm) * 1000;
-  return quarterNoteMs * relativeDuration;
-}
-
-let audioCtx;
-const activeOscillators = new Map();
-
-// Initialize audio context
+// Initialize audio context and transport
 export function initAudioContext() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === "suspended") {
-    audioCtx.resume();
-  }
+  Tone.start();
+  Tone.getTransport().bpm.value = 120; // default BPM
 }
 
-function frequencyFor(noteName, oct) {
-  const semitoneMap = {
-    C: -9,
-    "C#": -8,
-    D: -7,
-    "D#": -6,
-    E: -5,
-    F: -4,
-    "F#": -3,
-    G: -2,
-    "G#": -1,
-    A: 0,
-    "A#": 1,
-    B: 2,
-  };
-  const semitoneOffset = semitoneMap[noteName] + 12 * (oct - 4);
-  return 440 * 2 ** (semitoneOffset / 12);
+// Set the BPM using Tone.js Transport
+export function setBPM(bpm) {
+  Tone.getTransport().bpm.value = bpm;
 }
 
 export function startNote(noteName) {
-  if (!audioCtx) return;
-  if (activeOscillators.has(noteName)) return;
+  try {
+    const instrument = getCurrentInstrument();
+    const note = `${noteName}${octave.value}`;
 
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-
-  osc.type = "sine";
-  osc.frequency.value = frequencyFor(noteName, octave.value);
-
-  gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.5, audioCtx.currentTime + 0.02);
-
-  osc.connect(gain).connect(audioCtx.destination);
-  osc.start();
-
-  activeOscillators.set(noteName, { osc, gain });
+    // For Sampler (piano)
+    if (instrument instanceof Tone.Sampler) {
+      instrument.triggerAttack(note);
+    }
+    // For synths that support note-specific trigger
+    else if (
+      instrument instanceof Tone.PolySynth ||
+      instrument instanceof Tone.Synth ||
+      instrument instanceof Tone.AMSynth ||
+      instrument instanceof Tone.FMSynth
+    ) {
+      instrument.triggerAttack(note);
+    } else {
+      // For percussion-like synths, just trigger with frequency
+      const freq = Tone.Frequency(note).toFrequency();
+      instrument.frequency.value = freq;
+      instrument.triggerAttack();
+    }
+  } catch (error) {
+    console.warn("Error starting note:", error);
+  }
 }
 
 export function stopNote(noteName) {
-  if (!audioCtx) return;
-  const entry = activeOscillators.get(noteName);
-  if (!entry) return;
+  try {
+    const instrument = getCurrentInstrument();
+    const note = `${noteName}${octave.value}`;
 
-  const { osc, gain } = entry;
-  const now = audioCtx.currentTime;
-
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-  osc.stop(now + 0.07);
-
-  activeOscillators.delete(noteName);
+    // For Sampler (piano)
+    if (instrument instanceof Tone.Sampler) {
+      instrument.triggerRelease(note);
+    } else {
+      // For other instruments, just release without arguments
+      instrument.triggerRelease();
+    }
+  } catch (error) {
+    console.warn("Error stopping note:", error);
+  }
 }
 
 export function decrementOctave() {

@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tonejs/piano": "^0.2.1",
     "pinia": "^3.0.2",
+    "pitchy": "^4.1.0",
+    "tone": "^15.1.22",
     "vue": "^3.3.4"
   },
   "devDependencies": {

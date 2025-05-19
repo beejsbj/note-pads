@@ -1,45 +1,48 @@
 export const melodies = {
   "Twinkle Twinkle Little Star": {
     name: "Twinkle Twinkle Little Star",
+    defaultBpm: 100, // Gentle, child-friendly tempo
     notes: [
-      { note: "C", duration: 1 },
-      { note: "C", duration: 1 },
-      { note: "G", duration: 1 },
-      { note: "G", duration: 1 },
-      { note: "A", duration: 1 },
-      { note: "A", duration: 1 },
-      { note: "G", duration: 2 },
-      { note: "F", duration: 1 },
-      { note: "F", duration: 1 },
-      { note: "E", duration: 1 },
-      { note: "E", duration: 1 },
-      { note: "D", duration: 1 },
-      { note: "D", duration: 1 },
-      { note: "C", duration: 2 },
+      { note: "C", duration: "4n" }, // quarter note
+      { note: "C", duration: "4n" },
+      { note: "G", duration: "4n" },
+      { note: "G", duration: "4n" },
+      { note: "A", duration: "4n" },
+      { note: "A", duration: "4n" },
+      { note: "G", duration: "2n" }, // half note
+      { note: "F", duration: "4n" },
+      { note: "F", duration: "4n" },
+      { note: "E", duration: "4n" },
+      { note: "E", duration: "4n" },
+      { note: "D", duration: "4n" },
+      { note: "D", duration: "4n" },
+      { note: "C", duration: "2n" },
     ],
   },
   "Six Hundred Men": {
     name: "Six Hundred Men",
+    defaultBpm: 140, // More upbeat tempo
     notes: [
-      { note: "D#", duration: 0.5 },
-      { note: "F", duration: 0.5 },
-      { note: "G", duration: 0.5 },
-      { note: "G#", duration: 0.5 },
-      { note: "A#", duration: 0.5 },
-      { note: "A#", duration: 0.5 },
-      { note: "C", duration: 1 },
-      { note: "A#", duration: 0.5 },
-      { note: "G#", duration: 0.5 },
+      { note: "D#", duration: "8n" }, // eighth note
+      { note: "F", duration: "8n" },
+      { note: "G", duration: "8n" },
+      { note: "G#", duration: "8n" },
+      { note: "A#", duration: "8n" },
+      { note: "A#", duration: "8n" },
+      { note: "C", duration: "4n" },
+      { note: "A#", duration: "8n" },
+      { note: "G#", duration: "8n" },
     ],
   },
 
   "Full Speed Ahead": {
     name: "Full Speed Ahead",
+    defaultBpm: 160, // Fast, energetic tempo
     notes: [
-      { note: "D#", duration: 0.5 }, // E♭ "Full"
-      { note: "G", duration: 0.5 }, // "speed"
-      { note: "G#", duration: 0.5 }, // A♭ "a-"
-      { note: "F", duration: 1.0 }, // "head" (quarter note)
+      { note: "D#", duration: "8n" }, // eighth note
+      { note: "G", duration: "8n" },
+      { note: "G#", duration: "8n" },
+      { note: "F", duration: "4n" }, // quarter note
     ],
   },
 };

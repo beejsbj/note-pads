@@ -52,6 +52,7 @@ defineProps({
   align-items: center;
   justify-content: space-between;
   padding-top: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .nav-btn {
