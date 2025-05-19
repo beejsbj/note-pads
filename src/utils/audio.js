@@ -32,7 +32,10 @@ export function setBPM(bpm) {
 export function startNote(noteName) {
   try {
     const instrument = getCurrentInstrument();
-    const note = `${noteName}${octave.value}`;
+
+    // Check if noteName already includes an octave number (e.g., "A4", "B5")
+    const hasOctave = /^[A-G]#?\d$/.test(noteName);
+    const note = hasOctave ? noteName : `${noteName}${octave.value}`;
 
     // For Sampler (piano)
     if (instrument instanceof Tone.Sampler) {
@@ -60,7 +63,10 @@ export function startNote(noteName) {
 export function stopNote(noteName) {
   try {
     const instrument = getCurrentInstrument();
-    const note = `${noteName}${octave.value}`;
+
+    // Check if noteName already includes an octave number (e.g., "A4", "B5")
+    const hasOctave = /^[A-G]#?\d$/.test(noteName);
+    const note = hasOctave ? noteName : `${noteName}${octave.value}`;
 
     // For Sampler (piano)
     if (instrument instanceof Tone.Sampler) {

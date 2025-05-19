@@ -49,11 +49,14 @@ function handleMelodyChange(event) {
         </option>
       </select>
       <button
+        v-if="!store.isPlaying"
         @click="store.playMelody"
-        :disabled="store.isPlaying"
         class="play-button"
       >
-        {{ store.isPlaying ? "Playing..." : "Play" }}
+        Play
+      </button>
+      <button v-else @click="store.stopPlayback" class="stop-button">
+        Stop
       </button>
     </div>
   </div>
@@ -112,6 +115,26 @@ function handleMelodyChange(event) {
 }
 
 .play-button:disabled {
+  background-color: var(--button-disabled);
+  cursor: not-allowed;
+}
+
+.stop-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  background-color: var(--button-danger);
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.stop-button:hover:not(:disabled) {
+  background-color: var(--button-danger-hover);
+}
+
+.stop-button:disabled {
   background-color: var(--button-disabled);
   cursor: not-allowed;
 }

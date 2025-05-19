@@ -11,6 +11,11 @@ export const useMelodyStore = defineStore("melody", () => {
   const highlightedNote = ref(null);
   let currentScheduleId = null;
 
+  // Helper function to get base note without octave
+  function getBaseNote(note) {
+    return note.replace(/\d+$/, "");
+  }
+
   console.log(melodies);
 
   function setSelectedMelody(melodyName) {
@@ -53,7 +58,7 @@ export const useMelodyStore = defineStore("melody", () => {
         // Schedule note start
         const startId = transport.schedule((time) => {
           startNote(note);
-          highlightedNote.value = note;
+          highlightedNote.value = getBaseNote(note);
         }, currentTime);
 
         // Schedule note stop and calculate next time
